@@ -15,14 +15,14 @@ public class Message {
     //  a public message application
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name="sender_id")
-    private User sender;
 
-    @Column(name="content", length = 1000)
-    private String content;
+    @Column(name="sender", nullable = false)
+    private String sender;
+
+    @Column(name="message", length = 1000)
+    private String message;
 
     @Column(name="created_at")
     @CreationTimestamp
