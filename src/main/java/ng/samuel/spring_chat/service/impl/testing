@@ -1,0 +1,252 @@
+const connect =()=>{
+        let Sock = new SockJS('http://localhost:8080/ws');
+        stompClient = over(Sock);
+        stompClient.connect({},onConnected, onError);
+    }
+
+// the second
+ const connect = () => {
+    clientInit.current = true;
+    const socket = new SockJS("/chat");
+    const tempstompClient = Stomp.over(socket);
+    tempstompClient.connect(
+      { "client-id": userData.userId },
+      () => {
+        setConnected(true);
+        setStompClient(tempstompClient);
+      },
+      (er) => {
+        console.error(er);
+      }
+    );
+  };
+
+  // the third
+  const connect = () => {
+      let sock = new SockJS("http://localhost:8080/ws");
+      stompClient = over(sock);
+      stompClient.connect({}, onConnect, onError);
+    };
+
+    // the fourth:
+      function connect() {
+        let socket = new SockJS("http://localhost:8080/ws");
+
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+          console.log("Connected : " + frame);
+
+          //subscribe
+          stompClient.subscribe("/topic/return-to", function (response) {
+            showMessage(JSON.parse(response.body));
+          });
+
+          //subscirbe private message
+          stompClient.subscribe(
+            `/user/${localStorage.getItem("chat-username")}/private`,
+            onPrivateMessage
+          );
+        });
+      }
+
+      // axios
+       const updateDisplayName = () => {
+              axios
+                  .patch("/api/users/update/display_name", null, {
+                      params: {displayName: displayNameInput}
+                  })
+                  .then((res: AxiosResponse) => {
+                      checkRedirect(res);
+                      const newUser: User = res.data.user;
+                      props.setUser(newUser);
+                      setSuccess(true);
+                  })
+                  .catch((e: AxiosError) => {
+                      checkError(e);
+                      setSuccess(false);
+                  })
+          }
+
+          // second axios
+           const searchUser = () => {
+                  axios
+                      .get("/api/users/search", {
+                          params: {username: usernameInput}
+                      })
+                      .then((res: AxiosResponse) => {
+                          checkRedirect(res);
+                          const data = res.data;
+                          const user: User = data.user;
+                          if (user == null) {
+                              setNotFoundUsername(usernameInput);
+                          } else {
+                              setUsers(prev => [...prev, user]);
+                              setNotFoundUsername('');
+                          }
+                      })
+                      .catch((e: AxiosError) => {
+                          checkError(e);
+                      })
+              }
+
+              // third axios
+
+              const fetchGroupChats = () => {
+                      axios
+                          .get("/api/groupchat/get")
+                          .then((res: AxiosResponse) => {
+                              checkRedirect(res);
+                              setGroupChats(res.data.groupChats);
+                          })
+                          .catch((e: AxiosError) => {
+                              checkError(e);
+                          })
+                  }
+
+           // socket js
+
+           useEffect(() => {
+                   stompClient.current = Stomp.over(new SockJS("/ws"));
+                   const client: Client = stompClient.current;
+                   client.connect({}, onConnected, onError);
+                   return () => {
+                       if (stompSubscription.current) {
+                           stompSubscription.current.unsubscribe();
+                       }
+                       if (stompErrorSubscription.current) {
+                           stompErrorSubscription.current.unsubscribe();
+                       }
+                       if (client.connected) {
+                           client.disconnect(() => {}, {});
+                       }
+                   }
+               }, []);
+
+               // the fifth axios
+
+                 const getUser = () => {
+                       axios
+                           .get('/api/login/user')
+                           .then((res: AxiosResponse) => {
+                               const data = res.data;
+                               if (data.newUser) {
+                                   window.location.href = "/new_user";
+                               } else if (data.loggedIn) {
+                                   const user: User = data.user;
+                                   setUser(user);
+                                   setLoggedIn(true);
+                               } else {
+                                   loggedOut();
+                               }
+                           })
+                           .catch(() => {
+                               loggedOut();
+                               alert("Error in login, refresh.");
+                           });
+                       const loggedOut = () => {
+                           setUser(null);
+                           setLoggedIn(false);
+                       }
+                   }
+
+       // socket connect
+
+           async function connect(userDetails: UserSchema) {
+               const socket = new SockJS(`${process.env.REACT_APP_BE_URL}/ws` || '');
+               wsClient.current = Stomp.over(socket);
+               wsClient.current.connect({}, onConnected, onError);
+               let fetchedOnlineUsers = await getOnlineUsers();
+               for (const user of fetchedOnlineUsers) {
+                   if (user.id === userDetails.id) continue;
+                   const messages = await getAllMessages(userDetails.id, user.id);
+
+                   onlineUsers.set(user.id, user);
+                   setOnlineUsers(new Map(onlineUsers));
+
+                   privateMessages.set(user.id, messages);
+                   setPrivateMessages(new Map(privateMessages));
+               }
+           }
+
+
+           two important things to import for chat app
+
+           import SockJS from "sockjs-client";
+           import Stomp from "stompjs";
+
+
+           Frontend assignment:
+           :Read on react virtual Dom
+           :convert the frontend to react frontend (done)
+           :Search for interview questions on react.
+           :component jsx and props(context props)
+
+
+     // lets checkout onConnected function:
+      const onConnected = () => {
+             setUserData({...userData,"connected": true});
+             stompClient.subscribe('/chatroom/public', onMessageReceived);
+             stompClient.subscribe('/user/'+userData.username+'/private', onPrivateMessage);
+             userJoin();
+         }
+         //2
+         () => {
+                 setConnected(true);
+                 setStompClient(tempstompClient);
+               },
+
+          //3
+            console.log("Connected : " + frame);
+
+                //subscribe
+                stompClient.subscribe("/topic/return-to", function (response) {
+                  showMessage(JSON.parse(response.body));
+                });
+
+                //subscirbe private message
+                stompClient.subscribe(
+                  `/user/${localStorage.getItem("chat-username")}/private`,
+                  onPrivateMessage
+
+                  //4
+                  const onConnected = () => {
+                          const client: Client = stompClient.current;
+                          stompSubscription.current = client.subscribe(`/topic/groupchat/${groupChat.id}`, onMessageReceived);
+                          stompErrorSubscription.current = client.subscribe(`/user/topic/errors`, onErrorReceived);
+                          subscriptionStart.current = Date.now();
+                          loadMessages();
+                      }
+
+                      //
+                         const onConnected = () => {
+                              if (!wsClient.current) return;
+                              while (!wsClient.current.connected) { }
+                              // listen new user queue
+                              wsClient.current.subscribe(
+                                  '/online',
+                                  onNewOnlineReceived
+                              );
+                              // listen private message queue
+                              wsClient.current.subscribe(
+                                  `/user/${details?.id}/queue/messages`,
+                                  onPrivateMessageReceived
+                              );
+                              // listen public message queue
+                              wsClient.current.subscribe(
+                                  `/public`,
+                                  onPublicMessageReceived
+                              );
+
+                              wsClient.current.send(
+                                  '/app/user.addUser',
+                                  {},
+                                  JSON.stringify({
+                                      id: details?.id,
+                                      username: details?.username,
+                                      fullName: details?.fullName,
+                                  })
+                              );
+                          };
+
+
