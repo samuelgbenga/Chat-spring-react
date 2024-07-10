@@ -19,7 +19,10 @@ public class Message {
 
 
     @Column(name="sender", nullable = false)
-    private String sender;
+    private String senderName;
+
+    @Column(name="receiver")
+    private String receiverName;
 
     @Column(name="message", length = 1000)
     private String message;
@@ -27,4 +30,8 @@ public class Message {
     @Column(name="created_at")
     @CreationTimestamp
     private String createdAt;
+
+    private String date;
+
+    private Status status;
 }

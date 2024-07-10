@@ -29,7 +29,7 @@ public class MessageServiceImpl implements MessageService {
 
         Message message = Message.builder()
                 .message(messageRequest.getMessage())
-                .sender(messageRequest.getSender())
+                .senderName(messageRequest.getSenderName())
                 .build();
         messageRepository.save(message);
 

@@ -3,11 +3,12 @@ package ng.samuel.spring_chat.config;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 
-@EnableWebSocket
+@EnableWebSocketMessageBroker
 @Configuration
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
@@ -22,7 +23,7 @@ This line of code configures a WebSocket endpoint /chat in a Spring Boot applica
 
         //  this is how you create the socket js connection
         // var socket = new SockJS('http://localhost:8080/chat');
-        registry.addEndpoint("/chat").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
     }
 
 
@@ -36,7 +37,7 @@ setApplicationDestinationPrefixes: Specifies the prefix for endpoints where clie
         //enableSimpleBroker: Manages how messages are delivered to clients.
         // this is the web broker endpoint that manages how message are delivered
         // so sendTo annotation or its equivalent will always begin with this prefix
-            registry.enableSimpleBroker("/topic");
+            registry.enableSimpleBroker("/chatroom", "/user");
 
 
             //setApplicationDestinationPrefixes: Manages how clients send messages to the server.
@@ -44,6 +45,10 @@ setApplicationDestinationPrefixes: Specifies the prefix for endpoints where clie
             // it used by the client to send message to the service
             // it is a prefix used by the client to send message to the server
             registry.setApplicationDestinationPrefixes("/app");
+
+
+            // for private user
+            registry.setUserDestinationPrefix("/user");
 
     }
 }
