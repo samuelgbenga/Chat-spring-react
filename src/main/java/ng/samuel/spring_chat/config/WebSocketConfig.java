@@ -22,7 +22,7 @@ This line of code configures a WebSocket endpoint /chat in a Spring Boot applica
 
 
         //  this is how you create the socket js connection
-        // var socket = new SockJS('http://localhost:8080/chat');
+        // var socket = new SockJS('http://localhost:8080/ws');
         registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
     }
 
